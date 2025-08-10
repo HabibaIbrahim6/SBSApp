@@ -11,11 +11,12 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
+  late Animation<double> _rotationAnimation;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
+  late Animation<Offset> _logoSlideAnimation;
 
   @override
   void initState() {
@@ -23,14 +24,27 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 4),  // مدة الأنيميشن (كبيرة)
+      duration: Duration(seconds: 3),
     );
 
-    // تكبير التدرجي للشعار
-    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+    // تكبير التدرجي للشعار مع تأثير مرن
+    _scaleAnimation = Tween<double>(begin: 0.2, end: 1.2).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Curves.elasticOut,
+        curve: Interval(0.0, 0.7, curve: Curves.elasticOut),
+      ),
+    )..addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        // بعد اكتمال التكبير، نعود للحجم الطبيعي
+        _controller.animateTo(0.8, duration: Duration(milliseconds: 500));
+      }
+    });
+
+    // دوران الشعار عند الدخول
+    _rotationAnimation = Tween<double>(begin: -0.5, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeOutBack,
       ),
     );
 
@@ -38,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen>
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Interval(0.3, 1.0, curve: Curves.easeIn),
+        curve: Interval(0.2, 1.0, curve: Curves.easeIn),
       ),
     );
 
@@ -53,16 +67,27 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
 
+    // حركة انزلاق للشعار من الجانب
+    _logoSlideAnimation = Tween<Offset>(
+      begin: Offset(-2.0, 0.0), 
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.elasticOut,
+      ),
+    );
+
     _controller.forward();
 
-    Future.delayed(Duration(seconds: 5), () {  // زمن الانتظار قبل التنقل (أطول)
+    Future.delayed(Duration(seconds: 4), () {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
           pageBuilder: (_, __, ___) => HomePage(),
           transitionsBuilder: (_, a, __, c) =>
               FadeTransition(opacity: a, child: c),
-          transitionDuration: Duration(milliseconds: 1000),
+          transitionDuration: Duration(milliseconds: 800),
         ),
       );
     });
@@ -90,14 +115,21 @@ class _SplashScreenState extends State<SplashScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // الشعار مع تأثيرات الحركة
-                ScaleTransition(
-                  scale: _scaleAnimation,
-                  child: FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: Icon(
-                      Icons.shopping_bag,
-                      size: 100,
-                      color: const Color(0xFFF4C42D),
+                SlideTransition(
+                  position: _logoSlideAnimation,
+                  child: ScaleTransition(
+                    scale: _scaleAnimation,
+                    child: RotationTransition(
+                      turns: _rotationAnimation,
+                      child: FadeTransition(
+                        opacity: _fadeAnimation,
+                        child: Image.asset(
+                          'assets/images/logo.png', // تأكد من وجود الصورة في المسار الصحيح
+                          width: 200,
+                          height: 200,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -152,10 +184,11 @@ class _SplashScreenState extends State<SplashScreen>
             right: 0,
             child: Center(
               child: SizedBox(
-                width: 100,
+                width: 150,
                 child: LinearProgressIndicator(
                   backgroundColor: Colors.white.withOpacity(0.2),
                   valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFF4C42D)),
+                  minHeight: 5,
                 ),
               ),
             ),
@@ -166,7 +199,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 }
 
-// خلفية متحركة مع فقاعات
+// خلفية متحركة مع فقاعات (نفس الكود السابق)
 class AnimatedBackground extends StatefulWidget {
   @override
   _AnimatedBackgroundState createState() => _AnimatedBackgroundState();
@@ -174,7 +207,6 @@ class AnimatedBackground extends StatefulWidget {
 
 class _AnimatedBackgroundState extends State<AnimatedBackground>
     with SingleTickerProviderStateMixin {
-
   late AnimationController _controller;
   List<Bubble> bubbles = [];
 
