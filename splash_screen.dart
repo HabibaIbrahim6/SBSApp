@@ -16,7 +16,6 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _rotationAnimation;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
-  late Animation<Offset> _logoSlideAnimation;
 
   @override
   void initState() {
@@ -24,27 +23,22 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 3),
+      duration: Duration(seconds: 2),
     );
 
-    // تكبير التدرجي للشعار مع تأثير مرن
-    _scaleAnimation = Tween<double>(begin: 0.2, end: 1.2).animate(
+    // تكبير التدرجي للشعار
+    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Interval(0.0, 0.7, curve: Curves.elasticOut),
+        curve: Curves.fastOutSlowIn,
       ),
-    )..addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        // بعد اكتمال التكبير، نعود للحجم الطبيعي
-        _controller.animateTo(0.8, duration: Duration(milliseconds: 500));
-      }
-    });
+    );
 
-    // دوران الشعار عند الدخول
-    _rotationAnimation = Tween<double>(begin: -0.5, end: 0.0).animate(
+    // دوران بسيط للشعار
+    _rotationAnimation = Tween<double>(begin: -0.1, end: 0.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Curves.easeOutBack,
+        curve: Curves.easeOut,
       ),
     );
 
@@ -52,42 +46,31 @@ class _SplashScreenState extends State<SplashScreen>
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Interval(0.2, 1.0, curve: Curves.easeIn),
+        curve: Curves.easeIn,
       ),
     );
 
     // حركة انزلاق للنص
     _slideAnimation = Tween<Offset>(
-      begin: Offset(0.0, 0.5),
+      begin: Offset(0.0, 0.3),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Curves.fastOutSlowIn,
-      ),
-    );
-
-    // حركة انزلاق للشعار من الجانب
-    _logoSlideAnimation = Tween<Offset>(
-      begin: Offset(-2.0, 0.0), 
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Curves.elasticOut,
+        curve: Curves.easeOut,
       ),
     );
 
     _controller.forward();
 
-    Future.delayed(Duration(seconds: 4), () {
+    Future.delayed(Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
           pageBuilder: (_, __, ___) => HomePage(),
           transitionsBuilder: (_, a, __, c) =>
               FadeTransition(opacity: a, child: c),
-          transitionDuration: Duration(milliseconds: 800),
+          transitionDuration: Duration(milliseconds: 600),
         ),
       );
     });
@@ -102,12 +85,23 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF25488E),
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // خلفية متحركة
+          // خلفية بسيطة بدلاً من الفقاعات
           Positioned.fill(
-            child: AnimatedBackground(),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.white,
+                    Colors.grey.shade50,
+                  ],
+                ),
+              ),
+            ),
           ),
 
           Center(
@@ -115,20 +109,17 @@ class _SplashScreenState extends State<SplashScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // الشعار مع تأثيرات الحركة
-                SlideTransition(
-                  position: _logoSlideAnimation,
-                  child: ScaleTransition(
-                    scale: _scaleAnimation,
-                    child: RotationTransition(
-                      turns: _rotationAnimation,
-                      child: FadeTransition(
-                        opacity: _fadeAnimation,
-                        child: Image.asset(
-                          'assets/images/logo.png', // تأكد من وجود الصورة في المسار الصحيح
-                          width: 200,
-                          height: 200,
-                          fit: BoxFit.contain,
-                        ),
+                ScaleTransition(
+                  scale: _scaleAnimation,
+                  child: RotationTransition(
+                    turns: _rotationAnimation,
+                    child: FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        width: 150,
+                        height: 150,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),
@@ -146,16 +137,9 @@ class _SplashScreenState extends State<SplashScreen>
                         Text(
                           'إيجارك',
                           style: GoogleFonts.tajawal(
-                            fontSize: 42,
+                            fontSize: 36,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            shadows: [
-                              Shadow(
-                                blurRadius: 10.0,
-                                color: Colors.black.withOpacity(0.3),
-                                offset: Offset(2.0, 2.0),
-                              ),
-                            ],
+                            color: Color(0xFF25488E),
                           ),
                         ),
 
@@ -164,9 +148,8 @@ class _SplashScreenState extends State<SplashScreen>
                         Text(
                           'منصة التأجير الأولى',
                           style: GoogleFonts.tajawal(
-                            fontSize: 18,
-                            color: Colors.white.withOpacity(0.9),
-                            letterSpacing: 1.2,
+                            fontSize: 16,
+                            color: Color(0xFF212121).withOpacity(0.8),
                           ),
                         ),
                       ],
@@ -184,11 +167,11 @@ class _SplashScreenState extends State<SplashScreen>
             right: 0,
             child: Center(
               child: SizedBox(
-                width: 150,
+                width: 120,
                 child: LinearProgressIndicator(
-                  backgroundColor: Colors.white.withOpacity(0.2),
+                  backgroundColor: Colors.grey.shade300,
                   valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFF4C42D)),
-                  minHeight: 5,
+                  minHeight: 3,
                 ),
               ),
             ),
@@ -197,91 +180,4 @@ class _SplashScreenState extends State<SplashScreen>
       ),
     );
   }
-}
-
-// خلفية متحركة مع فقاعات (نفس الكود السابق)
-class AnimatedBackground extends StatefulWidget {
-  @override
-  _AnimatedBackgroundState createState() => _AnimatedBackgroundState();
-}
-
-class _AnimatedBackgroundState extends State<AnimatedBackground>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  List<Bubble> bubbles = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 10),
-    )..repeat();
-
-    // إنشاء فقاعات عشوائية
-    for (int i = 0; i < 20; i++) {
-      bubbles.add(Bubble());
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        // تحديث مواقع الفقاعات
-        bubbles.forEach((bubble) => bubble.update());
-
-        return CustomPaint(
-          painter: BubblePainter(bubbles: bubbles),
-        );
-      },
-    );
-  }
-}
-
-class Bubble {
-  double x = Random().nextDouble();
-  double y = Random().nextDouble();
-  double size = Random().nextDouble() * 10 + 5;
-  double speed = Random().nextDouble() * 0.5 + 0.1;
-  Color color = Colors.white.withOpacity(Random().nextDouble() * 0.2 + 0.05);
-
-  void update() {
-    y -= speed / 100;
-    if (y < -0.2) {
-      y = 1.2;
-      x = Random().nextDouble();
-    }
-  }
-}
-
-class BubblePainter extends CustomPainter {
-  final List<Bubble> bubbles;
-
-  BubblePainter({required this.bubbles});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..style = PaintingStyle.fill;
-
-    for (var bubble in bubbles) {
-      paint.color = bubble.color;
-      canvas.drawCircle(
-        Offset(bubble.x * size.width, bubble.y * size.height),
-        bubble.size,
-        paint,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
