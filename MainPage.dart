@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.find_in_page, color: Colors.white),
+              icon: Icon(Icons.tune, color: Colors.white),
               onPressed: () {
                 Navigator.push(
                   context,
