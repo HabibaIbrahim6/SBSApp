@@ -1,0 +1,61 @@
+import 'package:flutter/material.dart';
+import 'package:myapp/signup_page.dart';
+import 'package:myapp/login_page.dart';
+import 'package:myapp/splash_screen.dart';
+
+import 'CategoriesPage.dart';
+import 'CompanyForm.dart';
+import 'ContactUS.dart';
+import 'FilterPage.dart';
+import 'FormIndIndividual.dart';
+import 'MainPage.dart' hide CategoriesPage;
+import 'aboutUs.dart';
+import 'home_page.dart';
+import 'signup_page.dart';
+
+void main() {
+  runApp(EjarkApp());
+}
+
+class EjarkApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'إيجارك',
+      theme: ThemeData(
+        primaryColor: Color(0xFF1C3D5A),
+        colorScheme: ColorScheme.light(
+          primary: Color(0xFF1C3D5A),
+          secondary: Color(0xFF66BB6A),
+        ),
+        fontFamily: 'Cairo',
+        appBarTheme: AppBarTheme(
+          elevation: 0,
+          centerTitle: true,
+          titleTextStyle: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Cairo',
+            color: Colors.white,
+          ),
+          iconTheme: IconThemeData(color: Colors.white),
+        ),
+      ),
+      initialRoute: '/splash', // تم تغيير هذا ليكون الشاشة الأولى
+      routes: {
+        '/': (context) => HomePage(),
+        '/ta2geer':(context)=>HomePage2(),
+        '/login': (context) => LoginPage(),
+        '/signup': (context) => RegisterPage(),
+        '/about': (context) => AboutUsPage(),
+        '/contact': (context) => ContactUsPage(),
+        '/catagories': (context) => CategoriesPage(),
+        '/formI': (context) => IndividualForm(),
+        '/formC': (context) => CompanyForm(),
+        '/splash': (context) => SplashScreen(),
+        '/filterpage':(context)=>AdvancedFilterPage()
+      },
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
