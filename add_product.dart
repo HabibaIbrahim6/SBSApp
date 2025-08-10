@@ -200,7 +200,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   prefixIcon: const Padding(
                     padding: EdgeInsets.only(left: 16, right: 8),
                     child: Text(
-                      'ر.س',
+                    'ج.م',
                       style: TextStyle(
                         color: Color(0xFF25488E),
                         fontWeight: FontWeight.bold,
@@ -362,3 +362,4 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
   }
 }
+
