@@ -1,35 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+// استيراد الصفحات
 import 'package:myapp/signup_page.dart';
 import 'package:myapp/login_page.dart';
 import 'package:myapp/splash_screen.dart';
+import 'product_details.dart';  // استيراد صفحة تفاصيل المنتج بشكل مباشر
 
 import 'CategoriesPage.dart';
 import 'CompanyForm.dart';
 import 'ContactUS.dart';
 import 'FilterPage.dart';
-import 'FormIndIndividual.dart';
-import 'MainPage.dart' hide CategoriesPage;
+import 'FormIndividual.dart';
+import 'MainPage.dart' hide ProductDetailPage; // بدون hide عشان مفيش تعارض لو مش محتاج
 import 'aboutUs.dart';
 import 'home_page.dart';
-import 'signup_page.dart';
 
 void main() {
-  runApp(EjarkApp());
+  runApp(const EjarkApp());
 }
 
 class EjarkApp extends StatelessWidget {
+  const EjarkApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'إيجارك',
+      debugShowCheckedModeBanner: false,
+      locale: const Locale('ar'),
+      supportedLocales: const [
+        Locale('ar'),
+        Locale('en'),
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       theme: ThemeData(
-        primaryColor: Color(0xFF1C3D5A),
-        colorScheme: ColorScheme.light(
+        primaryColor: const Color(0xFF1C3D5A),
+        colorScheme: const ColorScheme.light(
           primary: Color(0xFF1C3D5A),
           secondary: Color(0xFF66BB6A),
         ),
         fontFamily: 'Cairo',
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           elevation: 0,
           centerTitle: true,
           titleTextStyle: TextStyle(
@@ -41,10 +57,16 @@ class EjarkApp extends StatelessWidget {
           iconTheme: IconThemeData(color: Colors.white),
         ),
       ),
-      initialRoute: '/splash', // تم تغيير هذا ليكون الشاشة الأولى
+      builder: (context, child) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: child!,
+        );
+      },
+      initialRoute: '/splash', // الشاشة الأولى
       routes: {
-        '/': (context) => HomePage(),
-        '/ta2geer':(context)=>HomePage2(),
+        '/': (context) =>  HomePage(),
+        '/ta2geer': (context) => HomePage2(),
         '/login': (context) => LoginPage(),
         '/signup': (context) => RegisterPage(),
         '/about': (context) => AboutUsPage(),
@@ -53,9 +75,9 @@ class EjarkApp extends StatelessWidget {
         '/formI': (context) => IndividualForm(),
         '/formC': (context) => CompanyForm(),
         '/splash': (context) => SplashScreen(),
-        '/filterpage':(context)=>AdvancedFilterPage()
+        '/filterpage': (context) => AdvancedFilterPage(),
+        '/product_detail': (context) => const ProductDetailPage(),
       },
-      debugShowCheckedModeBanner: false,
     );
   }
 }
