@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:myapp/product_details.dart';
+import 'account_typePage.dart';
 import 'ContactUS.dart';
 import 'FilterPage.dart';
 import 'aboutUs.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+// صفحة تفاصيل المنتج الجديدة
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,8 +17,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   bool userIsLoggedIn = false;
+
   final List<Widget> _pages = [
     HomeContent(),
+    AccountTypePage(),
     ContactUsPage(),
     AboutUsPage(),
   ];
@@ -31,7 +37,8 @@ class _HomePageState extends State<HomePage> {
             children: [
               Icon(Icons.shopping_cart, color: Color(0xFFF4C42D)),
               SizedBox(width: 8),
-              Text('إيجارك',
+              Text(
+                'إيجارك',
                 style: GoogleFonts.tajawal(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -49,15 +56,6 @@ class _HomePageState extends State<HomePage> {
           ),
           actions: [
             IconButton(
-              icon: Icon(Icons.tune, color: Colors.white),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AdvancedFilterPage()),
-                );
-              },
-            ),
-            IconButton(
               icon: Icon(Icons.person, color: Colors.white),
               onPressed: () {
                 if (!userIsLoggedIn) {
@@ -69,7 +67,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        body: _pages[_currentIndex], // يعرض الصفحة الحالية حسب المؤشر
+        body: _pages[_currentIndex],
         bottomNavigationBar: _buildBottomNavBar(),
       ),
     );
@@ -100,12 +98,15 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.white,
           selectedItemColor: Color(0xFF25488E),
           unselectedItemColor: Colors.grey[600],
-          selectedLabelStyle: GoogleFonts.tajawal(
-              fontWeight: FontWeight.bold),
+          selectedLabelStyle: GoogleFonts.tajawal(fontWeight: FontWeight.bold),
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: 'الرئيسية',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              label: 'نوع الحساب',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.contact_mail),
@@ -128,40 +129,68 @@ class HomeContent extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          _buildSearchBar(),
+          _buildSearchBar(context),
           _buildCarItem(
             'تويوتا كورولا',
             'مسطرة - القاهرة',
             'assets/toyota.jpg',
-            onRent: () {
-              Navigator.pushNamed(context, '/ta2geer');
+            onDetails: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProductDetailPage()),
+              );
             },
           ),
-          // يمكنك إضافة المزيد من عناصر السيارات هنا
+          // ممكن تضيفي سيارات تانية هنا
         ],
       ),
     );
   }
 
-  Widget _buildSearchBar() {
+  Widget _buildSearchBar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: 'إبحث بالاسم أو المنطقة',
-          prefixIcon: Icon(Icons.search, color: Color(0xFF212121)),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'إبحث بالاسم أو المنطقة',
+                prefixIcon: Icon(Icons.search, color: Color(0xFF212121)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                filled: true,
+                fillColor: Colors.grey[200],
+              ),
+            ),
           ),
-          filled: true,
-          fillColor: Colors.grey[200],
-        ),
+          const SizedBox(width: 12),
+          Container(
+            height: 48,
+            width: 48,
+            decoration: BoxDecoration(
+              color: Color(0xFF25488E),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: IconButton(
+              icon: Icon(Icons.tune, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AdvancedFilterPage()),
+                );
+              },
+              tooltip: 'فلترة',
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildCarItem(
-      String title, String location, String imagePath, {VoidCallback? onRent}) {
+      String title, String location, String imagePath, {VoidCallback? onDetails}) {
     return Card(
       margin: EdgeInsets.all(16),
       elevation: 4,
@@ -202,8 +231,8 @@ class HomeContent extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: onRent,
-                  child: Text('تأجير الآن',
+                  onPressed: onDetails,
+                  child: Text('عرض تفاصيل المنتج',
                       style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF25488E),
