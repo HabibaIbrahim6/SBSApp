@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -134,21 +135,42 @@ class _IndividualFormState extends State<IndividualForm> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          title: Text("تسجيل فرد",
-            style: GoogleFonts.tajawal(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+          backgroundColor: Color(0xFF25488E),
+          elevation: 4,
+          centerTitle: true,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(width: 8),
+
+              Text(
+                'تسجيل فرد',
+                style: GoogleFonts.tajawal(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(15),
             ),
           ),
-          backgroundColor: Color(0xFF25488E), // Blue navigation bar
-          elevation: 0,
-          centerTitle: true,
+
+
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF212121)),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
-          iconTheme: IconThemeData(color: Colors.white),
+
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Colors.white,
+            statusBarIconBrightness: Brightness.dark,
+          ),
         ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(20),
@@ -223,7 +245,7 @@ class _IndividualFormState extends State<IndividualForm> {
                   child: ElevatedButton(
                     onPressed: isLoading ? null : _register,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF25488E),
+                      backgroundColor: Color(0xFFF4C42D),
                       foregroundColor: Colors.white,
                       padding: EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
