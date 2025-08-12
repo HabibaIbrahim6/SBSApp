@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:myapp/product_details.dart';
+import 'product_details.dart';
 import 'account_typePage.dart';
-import 'ContactUS.dart';
+import 'ContactUs.dart';
 import 'FilterPage.dart';
 import 'aboutUs.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-// صفحة تفاصيل المنتج الجديدة
 
 class HomePage extends StatefulWidget {
   @override
@@ -58,11 +55,7 @@ class _HomePageState extends State<HomePage> {
             IconButton(
               icon: Icon(Icons.person, color: Colors.white),
               onPressed: () {
-                if (!userIsLoggedIn) {
-                  Navigator.pushNamed(context, '/login');
-                } else {
-                  // افتح صفحة الملف الشخصي
-                }
+                Navigator.pushNamed(context, '/dashboard');
               },
             ),
           ],
@@ -141,7 +134,6 @@ class HomeContent extends StatelessWidget {
               );
             },
           ),
-          // ممكن تضيفي سيارات تانية هنا
         ],
       ),
     );
@@ -221,13 +213,9 @@ class HomeContent extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
                 Row(
-                  children: [
-                    Icon(Icons.star, color: Color(0xFFF4C42D)),
-                    Icon(Icons.star, color: Color(0xFFF4C42D)),
-                    Icon(Icons.star, color: Color(0xFFF4C42D)),
-                    Icon(Icons.star, color: Color(0xFFF4C42D)),
-                    Icon(Icons.star, color: Color(0xFFF4C42D)),
-                  ],
+                  children: List.generate(5, (index) =>
+                      Icon(Icons.star, color: Color(0xFFF4C42D))
+                  ),
                 ),
                 SizedBox(height: 16),
                 ElevatedButton(
