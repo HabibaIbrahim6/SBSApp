@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -242,15 +243,41 @@ class _CompanyFormState extends State<CompanyForm> {
       child: Scaffold(
         backgroundColor: backgroundColor,
         appBar: AppBar(
-          title: Text("تسجيل حساب شركة جديد", style: GoogleFonts.tajawal(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          )),
-          backgroundColor: primaryColor,
-          elevation: 0,
+          backgroundColor: Color(0xFF25488E),
+          elevation: 4,
+          centerTitle: true,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(width: 8),
+
+              Text(
+                'تسجيل حساب شركة جديد',
+                style: GoogleFonts.tajawal(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(15),
+            ),
+          ),
+
+
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF212121)),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: Colors.white,
+            statusBarIconBrightness: Brightness.dark,
           ),
         ),
         body: SingleChildScrollView(
@@ -328,7 +355,7 @@ class _CompanyFormState extends State<CompanyForm> {
                   child: ElevatedButton(
                     onPressed: isLoading ? null : _register,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryColor,
+                      backgroundColor: accentColor,
                       foregroundColor: Colors.white,
                       padding: EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
