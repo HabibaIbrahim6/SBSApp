@@ -1,24 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'إيجارك',
-      theme: ThemeData(
-        fontFamily: 'Cairo',
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF25488E)),
-        useMaterial3: true,
-      ),
-      home: const AddProductScreen(),
-    );
-  }
-}
+import 'package:flutter/services.dart' show SystemUiOverlayStyle;
+import 'package:google_fonts/google_fonts.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -42,26 +24,43 @@ class _AddProductScreenState extends State<AddProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:Colors.white,
       appBar: AppBar(
+        backgroundColor: Color(0xFF25488E),
+        elevation: 4,
+        centerTitle: true,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(width: 8),
+
+            Text(
+              'إضافة منتج جديد',
+              style: GoogleFonts.tajawal(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(15),
+          ),
+        ),
+
+
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF212121)),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: Colors.white,
           statusBarIconBrightness: Brightness.dark,
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text(
-          'إضافة منتج جديد',
-          style: TextStyle(
-            color: Color(0xFF212121),
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF212121)),
-          onPressed: () {},
         ),
       ),
       body: SingleChildScrollView(
@@ -72,50 +71,71 @@ class _AddProductScreenState extends State<AddProductScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               // Header Section
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFF4C42D).withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    const Text(
-                      'قم بإضافة منتجك وابدأ في عرضه للتأجير',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xFF212121),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-
-                  ],
-                ),
-              ),
-              const SizedBox(height: 30),
+              // Container(
+              //   width: double.infinity,
+              //   padding: const EdgeInsets.all(20),
+              //   decoration: BoxDecoration(
+              //     color: const Color(0xFFF4C42D).withOpacity(0.1),
+              //     borderRadius: BorderRadius.circular(16),
+              //   ),
+              //   child: Column(
+              //     crossAxisAlignment: CrossAxisAlignment.end,
+              //     children: [
+              //       Row(
+              //         mainAxisAlignment: MainAxisAlignment.start,
+              //         children: [
+              //           Text(
+              //             'قم بإضافة منتجك وابدأ في عرضه للتأجير',
+              //             textAlign: TextAlign.right,
+              //             style: GoogleFonts.tajawal(
+              //               color: const Color(0xFF212121),
+              //               fontSize: 16,
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //
+              //       const SizedBox(height: 8),
+              //     ],
+              //   ),
+              // ),
+              // const SizedBox(height: 30),
 
               // Product Name Field
-              const Text(
-                'اسم المنتج',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF212121),
-                  fontSize: 16,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'اسم المنتج',
+                    textAlign: TextAlign.right,
+                    style: GoogleFonts.tajawal(
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF212121),
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
+
+
               const SizedBox(height: 8),
               TextFormField(
                 textAlign: TextAlign.right,
                 decoration: InputDecoration(
                   hintText: 'أدخل اسم المنتج',
-                  hintStyle: const TextStyle(color: Colors.grey),
+                  hintStyle: GoogleFonts.tajawal(color: Colors.grey),
                   filled: true,
-                  fillColor: Colors.grey.withOpacity(0.05),
+                  fillColor: Colors.grey[100],
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF25488E),
+                      width: 1.5,
+                    ),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -132,39 +152,54 @@ class _AddProductScreenState extends State<AddProductScreen> {
               const SizedBox(height: 20),
 
               // Product Category Field
-              const Text(
-                'اختر فئة المنتج',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF212121),
-                  fontSize: 16,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'اختر فئة المنتج',
+                    textAlign: TextAlign.right,
+                    style: GoogleFonts.tajawal(
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF212121),
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
+
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
                 isExpanded: true,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Colors.grey.withOpacity(0.05),
+                  fillColor: Colors.grey[100],
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF25488E),
+                      width: 1.5,
+                    ),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 8,
                   ),
                 ),
-                hint: const Text(
+                hint: Text(
                   'اختر الفئة',
                   textAlign: TextAlign.right,
-                  style: TextStyle(color: Colors.grey),
+                  style: GoogleFonts.tajawal(color: Colors.grey),
                 ),
                 items: _categories.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value, textAlign: TextAlign.right),
+                    child: Text(value,
+                        textAlign: TextAlign.right, style: GoogleFonts.tajawal()),
                   );
                 }).toList(),
                 onChanged: (newValue) {
@@ -182,27 +217,36 @@ class _AddProductScreenState extends State<AddProductScreen> {
               const SizedBox(height: 20),
 
               // Product Price Field
-              const Text(
-                'سعر المنتج',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF212121),
-                  fontSize: 16,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'سعر المنتج',
+                    textAlign: TextAlign.right,
+                    style: GoogleFonts.tajawal(
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF212121),
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
+
               const SizedBox(height: 8),
               TextFormField(
                 textAlign: TextAlign.right,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   hintText: 'أدخل السعر اليومي',
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  prefixIcon: const Padding(
-                    padding: EdgeInsets.only(left: 16, right: 8),
-                    child: Text(
-                    'ج.م',
-                      style: TextStyle(
-                        color: Color(0xFF25488E),
+                  hintStyle: GoogleFonts.tajawal(color: Colors.grey),
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 8),
+                    child:
+                    Text(
+                      'ج.م',
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.tajawal(
+                        color: const Color(0xFF25488E),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -210,10 +254,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   prefixIconConstraints:
                   const BoxConstraints(minWidth: 0, minHeight: 0),
                   filled: true,
-                  fillColor: Colors.grey.withOpacity(0.05),
+                  fillColor: Colors.grey[100],
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF25488E),
+                      width: 1.5,
+                    ),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -230,26 +281,40 @@ class _AddProductScreenState extends State<AddProductScreen> {
               const SizedBox(height: 20),
 
               // Product Description Field
-              const Text(
-                'وصف المنتج',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF212121),
-                  fontSize: 16,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'وصف المنتج',
+                    textAlign: TextAlign.right,
+                    style: GoogleFonts.tajawal(
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF212121),
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
+
               const SizedBox(height: 8),
               TextFormField(
                 textAlign: TextAlign.right,
                 maxLines: 4,
                 decoration: InputDecoration(
                   hintText: 'أدخل وصفاً تفصيلياً للمنتج',
-                  hintStyle: const TextStyle(color: Colors.grey),
+                  hintStyle: GoogleFonts.tajawal(color: Colors.grey),
                   filled: true,
-                  fillColor: Colors.grey.withOpacity(0.05),
+                  fillColor: Colors.grey[100],
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF25488E),
+                      width: 1.5,
+                    ),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -266,14 +331,21 @@ class _AddProductScreenState extends State<AddProductScreen> {
               const SizedBox(height: 20),
 
               // Product Images Upload
-              const Text(
-                'صور المنتج',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF212121),
-                  fontSize: 16,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'صور المنتج',
+                    textAlign: TextAlign.right,
+                    style: GoogleFonts.tajawal(
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF212121),
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
+
               const SizedBox(height: 8),
               GestureDetector(
                 onTap: () {
@@ -283,7 +355,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.05),
+                    color: Colors.grey[100],
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
                       color: Colors.grey.withOpacity(0.3),
@@ -300,12 +372,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       const SizedBox(height: 10),
                       Text(
                         _selectedImages.isEmpty
-                            ? 'No file chosen'
+                            ? 'لا يوجد ملفات مختارة'
                             : '${_selectedImages.length} ملفات مختارة',
                         style: TextStyle(
                           color: _selectedImages.isEmpty
                               ? Colors.grey
                               : const Color(0xFF25488E),
+                          fontFamily: GoogleFonts.tajawal().fontFamily,
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -318,9 +391,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           color: const Color(0xFF25488E),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Text(
+                        child: Text(
                           'اختر ملفات',
-                          style: TextStyle(color: Colors.white),
+                          style: GoogleFonts.tajawal(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
@@ -340,17 +415,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF25488E),
+                    backgroundColor: const Color(0xFFF4C42D),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
+                  child: Text(
                     'إضافة المنتج',
-                    style: TextStyle(
+                    style: GoogleFonts.tajawal(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      color: const Color(0xFF212121),
                     ),
                   ),
                 ),
@@ -362,4 +438,3 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
   }
 }
-
