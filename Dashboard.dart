@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -10,59 +11,9 @@ class DashboardApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'لوحة تحكم التأجير',
-      theme: ThemeData(
-        fontFamily: 'Cairo',
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: Color(0xFF25488E)),
-          bodyMedium: TextStyle(color: Color(0xFF25488E)),
-          titleLarge: TextStyle(color: Color(0xFF25488E)),
-          titleMedium: TextStyle(color: Color(0xFF25488E)),
-          titleSmall: TextStyle(color: Color(0xFF25488E)),
-          labelLarge: TextStyle(color: Color(0xFF25488E)),
-          labelMedium: TextStyle(color: Color(0xFF25488E)),
-          labelSmall: TextStyle(color: Color(0xFF25488E)),
-        ),
-        colorScheme: ColorScheme.light(
-          primary: const Color(0xFF25488E),
-          secondary: const Color(0xFFF4C42D),
-          surface: Colors.white,
-          background: const Color(0xFFF5F5F5),
-          error: Colors.red,
-          onPrimary: Colors.white,
-          onSecondary: Colors.black,
-          onSurface: const Color(0xFF25488E),
-          onBackground: const Color(0xFF25488E),
-          onError: Colors.white,
-          brightness: Brightness.light,
-        ),
-        useMaterial3: true,
-        cardTheme: CardThemeData(
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          margin: const EdgeInsets.symmetric(vertical: 8),
-        ),
-        appBarTheme: const AppBarTheme(
-          elevation: 0,
-          centerTitle: true,
-          titleTextStyle: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Cairo',
-            color: Colors.white,
-          ),
-          iconTheme: IconThemeData(color: Colors.white),
-        ),
-      ),
-      home: const DashboardScreen(),
-      routes: {
-        '/add_product': (context) => const AddProductScreen(),
-      },
-    );
+    // احنا هنا من المفترض ان الـ MaterialApp يكون في ملف رئيسي main.dart
+    // لو عايزة تشغلي التطبيق لوحده، خلي الكود هنا فقط لوحدة DashboardScreen بدون MaterialApp
+    return const DashboardScreen();
   }
 }
 
@@ -116,26 +67,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF25488E)),
-          onPressed: () {
-            // العودة إلى الشاشة الرئيسية
-            Navigator.of(context).popUntil((route) => route.isFirst);
-          },
+        backgroundColor: Color(0xFF25488E),
+        elevation: 4,
+        centerTitle: true,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(width: 8),
+
+            Text(
+              'بيانات الحساب',
+              style: GoogleFonts.tajawal(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
-        title: Text(
-          'لوحه التحكم',
-          style: GoogleFonts.tajawal(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: const Color(0xFF25488E),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(15),
           ),
         ),
-        centerTitle: true,
-      ),
 
+
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded, color: Color(0xFF212121)),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.white,
+          statusBarIconBrightness: Brightness.dark,
+        ),
+      ),
       body: Directionality(
         textDirection: TextDirection.rtl,
         child: SingleChildScrollView(
@@ -144,7 +112,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // بطاقة الملف الشخصي
                 GestureDetector(
                   onTap: () {
                     setState(() {
@@ -174,7 +141,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             backgroundColor: const Color(0xFFF5F5F5),
                             backgroundImage: _profileImage != null
                                 ? FileImage(_profileImage!)
-                                : const AssetImage('assets/images/profile.jpg') as ImageProvider,
+                                : const AssetImage('assets/images/profile.jpg')
+                            as ImageProvider,
                           ),
                           const SizedBox(width: 16),
                           Expanded(
@@ -199,16 +167,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 const SizedBox(height: 8),
                                 Row(
                                   children: [
-                                    _buildStatItem(uploadedItems.length.toString(), 'عنصر مرفوع'),
+                                    _buildStatItem(
+                                        uploadedItems.length.toString(),
+                                        'عنصر مرفوع'),
                                     const SizedBox(width: 16),
-                                    _buildStatItem(rentedItems.length.toString(), 'تم تأجيره'),
+                                    _buildStatItem(rentedItems.length.toString(),
+                                        'تم تأجيره'),
                                   ],
                                 ),
                               ],
                             ),
                           ),
                           Icon(
-                            _showProfileOptions ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                            _showProfileOptions
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_down,
                             size: 30,
                             color: const Color(0xFF25488E),
                           ),
@@ -217,18 +190,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                 ),
-
                 if (_showProfileOptions)
                   AnimatedOpacity(
                     opacity: _showProfileOptions ? 1.0 : 0.0,
                     duration: const Duration(milliseconds: 300),
                     child: _buildProfileOptions(),
                   ),
-
                 const SizedBox(height: 20),
                 _buildNavigationTabs(),
                 const SizedBox(height: 20),
-
                 _selectedIndex == 0
                     ? _buildUploadedItemsList()
                     : _buildRentedItemsList(),
@@ -430,34 +400,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                     const SizedBox(height: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 4,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                       decoration: BoxDecoration(
-                        color: item['status'] == 'متاح'
-                            ? const Color(0xFFF4C42D).withOpacity(0.2)
-                            : const Color(0xFF25488E).withOpacity(0.2),
+                        color: item['status'] == 'مكتمل' ? Colors.green[100] : Colors.orange[100],
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         item['status'],
                         style: TextStyle(
-                          color: item['status'] == 'متاح'
-                              ? const Color(0xFFF4C42D)
-                              : const Color(0xFF25488E),
+                          color: item['status'] == 'مكتمل' ? Colors.green[800] : Colors.orange[800],
                           fontWeight: FontWeight.bold,
-                          fontSize: 12,
                         ),
                       ),
-                    ),
+                    )
                   ],
                 ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.more_vert),
-                onPressed: () {},
-                color: const Color(0xFF25488E),
               ),
             ],
           ),
@@ -466,210 +423,87 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  void _showImagePickerDialog() {
-    showDialog(
+  Future<void> _showImagePickerDialog() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await showDialog<XFile?>(
       context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'اختر مصدر الصورة',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF25488E),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildImageSourceButton(
-                      icon: Icons.camera_alt,
-                      label: 'الكاميرا',
-                      onPressed: () async {
-                        Navigator.pop(context);
-                        final image = await ImagePicker().pickImage(source: ImageSource.camera);
-                        if (image != null) {
-                          setState(() {
-                            _profileImage = File(image.path);
-                          });
-                        }
-                      },
-                    ),
-                    _buildImageSourceButton(
-                      icon: Icons.photo_library,
-                      label: 'المعرض',
-                      onPressed: () async {
-                        Navigator.pop(context);
-                        final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-                        if (image != null) {
-                          setState(() {
-                            _profileImage = File(image.path);
-                          });
-                        }
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('إلغاء', style: TextStyle(color: Color(0xFF25488E))),
-                ),
-              ],
-            ),
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('اختر صورة'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('التقاط صورة بالكاميرا'),
+                onTap: () async {
+                  final XFile? photo = await picker.pickImage(source: ImageSource.camera);
+                  Navigator.of(context).pop(photo);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('اختيار من المعرض'),
+                onTap: () async {
+                  final XFile? photo = await picker.pickImage(source: ImageSource.gallery);
+                  Navigator.of(context).pop(photo);
+                },
+              ),
+            ],
           ),
         );
       },
     );
-  }
 
-  Widget _buildImageSourceButton({
-    required IconData icon,
-    required String label,
-    required VoidCallback onPressed,
-  }) {
-    return Column(
-      children: [
-        IconButton(
-          icon: Icon(icon, size: 40),
-          color: const Color(0xFF25488E),
-          onPressed: onPressed,
-        ),
-        const SizedBox(height: 4),
-        Text(label, style: const TextStyle(color: Color(0xFF25488E))),
-      ],
-    );
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path);
+      });
+    }
   }
 
   void _showChangePasswordDialog() {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return Directionality(
-          textDirection: TextDirection.rtl,
-          child: Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'تغيير كلمة المرور',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF25488E),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'كلمة المرور الحالية',
-                      labelStyle: const TextStyle(color: Color(0xFF25488E)),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF25488E)),
-                      ),
-                      prefixIcon: const Icon(Icons.lock, color: Color(0xFF25488E)),
-                    ),
-                    style: const TextStyle(color: Color(0xFF25488E)),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'كلمة المرور الجديدة',
-                      labelStyle: const TextStyle(color: Color(0xFF25488E)),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF25488E)),
-                      ),
-                      prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF25488E)),
-                    ),
-                    style: const TextStyle(color: Color(0xFF25488E)),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'تأكيد كلمة المرور',
-                      labelStyle: const TextStyle(color: Color(0xFF25488E)),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF25488E)),
-                      ),
-                      prefixIcon: const Icon(Icons.lock_reset, color: Color(0xFF25488E)),
-                    ),
-                    style: const TextStyle(color: Color(0xFF25488E)),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: const Color(0xFF25488E),
-                            side: const BorderSide(color: Color(0xFF25488E)),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('إلغاء'),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF25488E),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Text('تم تغيير كلمة المرور بنجاح'),
-                                backgroundColor: const Color(0xFF25488E),
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                            );
-                          },
-                          child: const Text('حفظ', style: TextStyle(color: Colors.white)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+      builder: (context) {
+        String oldPassword = '';
+        String newPassword = '';
+        return AlertDialog(
+          title: const Text('تغيير كلمة المرور'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                obscureText: true,
+                decoration: const InputDecoration(labelText: 'كلمة المرور القديمة'),
+                onChanged: (value) {
+                  oldPassword = value;
+                },
               ),
-            ),
+              TextField(
+                obscureText: true,
+                decoration: const InputDecoration(labelText: 'كلمة المرور الجديدة'),
+                onChanged: (value) {
+                  newPassword = value;
+                },
+              ),
+            ],
           ),
+          actions: [
+            TextButton(
+              child: const Text('إلغاء'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              child: const Text('تحديث'),
+              onPressed: () {
+                // اكتب هنا منطق تحديث كلمة المرور لو عايزة
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         );
       },
     );
@@ -678,91 +512,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _showUpdatePhoneDialog() {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return Directionality(
-          textDirection: TextDirection.rtl,
-          child: Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'تحديث رقم الهاتف',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF25488E),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    keyboardType: TextInputType.phone,
-                    decoration: InputDecoration(
-                      labelText: 'رقم الهاتف الجديد',
-                      labelStyle: const TextStyle(color: Color(0xFF25488E)),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF25488E)),
-                      ),
-                      prefixIcon: const Icon(Icons.phone, color: Color(0xFF25488E)),
-                    ),
-                    style: const TextStyle(color: Color(0xFF25488E)),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: const Color(0xFF25488E),
-                            side: const BorderSide(color: Color(0xFF25488E)),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('إلغاء'),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF25488E),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Text('تم تحديث رقم الهاتف بنجاح'),
-                                backgroundColor: const Color(0xFF25488E),
-                                behavior: SnackBarBehavior.floating,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                            );
-                          },
-                          child: const Text('حفظ', style: TextStyle(color: Colors.white)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+      builder: (context) {
+        String newPhone = '';
+        return AlertDialog(
+          title: const Text('تحديث رقم الهاتف'),
+          content: TextField(
+            keyboardType: TextInputType.phone,
+            decoration: const InputDecoration(labelText: 'رقم الهاتف الجديد'),
+            onChanged: (value) {
+              newPhone = value;
+            },
           ),
+          actions: [
+            TextButton(
+              child: const Text('إلغاء'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              child: const Text('تحديث'),
+              onPressed: () {
+                setState(() {
+                  _phone = newPhone;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         );
       },
     );
