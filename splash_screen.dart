@@ -105,7 +105,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                         child: FadeTransition(
                           opacity: _fadeAnimation,
                           child: Image.asset(
-                            'lib/assets/a 1.png',
+                            'lib/assets/a_1.jpg',
                             width: 300,
                             height: 300,
                           ),
@@ -120,14 +120,6 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                         opacity: _fadeAnimation,
                         child: Column(
                           children: [
-                            Text(
-                              'إيجارك',
-                              style: GoogleFonts.tajawal(
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xFF25488E),
-                              ),
-                            ),
                             const SizedBox(height: 10),
                             Text(
                               'منصة التأجير الأولى',
