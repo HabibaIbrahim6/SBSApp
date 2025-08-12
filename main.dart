@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:myapp/Dashboard.dart';
 
 // استيراد الصفحات
 import 'package:myapp/signup_page.dart';
 import 'package:myapp/login_page.dart';
-import 'package:myapp/splash_screen.dart';
+import 'package:myapp/splach_screen.dart';
+import 'ContactUs.dart';
+import 'add_product.dart';
 import 'product_details.dart';  // استيراد صفحة تفاصيل المنتج بشكل مباشر
 
 import 'CategoriesPage.dart';
 import 'CompanyForm.dart';
-import 'ContactUS.dart';
+import 'ContactUs.dart';
 import 'FilterPage.dart';
 import 'FormIndividual.dart';
 import 'MainPage.dart' hide ProductDetailPage; // بدون hide عشان مفيش تعارض لو مش محتاج
@@ -77,6 +80,8 @@ class EjarkApp extends StatelessWidget {
         '/splash': (context) => SplashScreen(),
         '/filterpage': (context) => AdvancedFilterPage(),
         '/product_detail': (context) => const ProductDetailPage(),
+        '/dashboard':(context)=> DashboardApp(),
+        '/add_product': (context) => AddProductScreen(),
       },
     );
   }
